@@ -1,0 +1,47 @@
+plugins {
+    id "java-library"
+    id 'java-test-fixtures'
+    id "org.jetbrains.kotlin.jvm" version "${kotlinVersion}"
+    id 'org.jetbrains.kotlin.kapt' version "${kotlinVersion}"
+
+    id "org.jetbrains.kotlin.plugin.spring" version "${kotlinVersion}"
+    id "org.springframework.boot" version "${springBootVersion}"
+    id "io.spring.dependency-management" version "${springDependencyVersion}"
+}
+
+allprojects {
+    apply {
+        from "$rootDir/base.gradle"
+    }
+
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-reflect"
+        implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.17.+"
+        implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
+        implementation "org.springframework.boot:spring-boot-starter"
+
+        testImplementation "org.springframework.boot:spring-boot-starter-test"
+        testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+        testImplementation 'org.testcontainers:junit-jupiter'
+        testImplementation "io.kotest:kotest-runner-junit5:${kotestVersion}"
+        testImplementation "io.kotest:kotest-assertions-core:${kotestVersion}"
+        testImplementation "io.kotest:kotest-property:${kotestVersion}"
+        testImplementation "io.mockk:mockk:${mockkVersion}"
+        testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
+        testImplementation "org.junit.jupiter:junit-jupiter"
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+            exceptionFormat "full"
+            showCauses true
+            showExceptions true
+        }
+    }
+}
+
+bootJar {
+    enabled false
+}
