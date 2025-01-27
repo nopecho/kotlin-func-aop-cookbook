@@ -1,4 +1,6 @@
 rootProject.name = "kotlin-functional-aop"
 include 'kotlin-func-aop-transaction'
+include 'kotlin-func-aop-cache'
+include 'kotlin-func-aop-lock'
 include 'kotlin-func-aop-support'
 
