@@ -13,7 +13,8 @@ readability, reusability, and maintainability while separating business logic fr
 
 ### kotlin-func-aop-transaction
 
-The TransactionFunc class provides static methods to execute code blocks within transactional contexts.
+[TransactionFunc](https://github.com/nopecho/kotlin-functional-aop/blob/main/kotlin-func-aop-transaction/src/main/kotlin/com/github/nopecho/funcaop/tx/TransactionFunc.kt)
+class provides static methods to execute code blocks within transactional contexts.
 During bean initialization, it injects `TransactionAdvice` into a static field for use.
 
 ### Example
