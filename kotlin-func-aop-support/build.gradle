@@ -1,0 +1,7 @@
+dependencies {
+    testFixturesApi "org.springframework.boot:spring-boot-starter-data-redis"
+    testFixturesApi "org.springframework.boot:spring-boot-starter-data-jdbc"
+    testFixturesApi "org.springframework.boot:spring-boot-starter-test"
+    testFixturesApi "org.testcontainers:postgresql"
+    testFixturesApi "org.springframework.boot:spring-boot-starter-test"
+}
