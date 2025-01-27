@@ -1,3 +1,4 @@
 rootProject.name = "kotlin-functional-aop"
-include 'kotlin-functional-aop-transaction'
+include 'kotlin-func-aop-transaction'
+include 'kotlin-func-aop-support'
 

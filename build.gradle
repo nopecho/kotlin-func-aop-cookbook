@@ -29,6 +29,7 @@ allprojects {
         testImplementation "io.mockk:mockk:${mockkVersion}"
         testImplementation platform("org.junit:junit-bom:${junitBomVersion}")
         testImplementation "org.junit.jupiter:junit-jupiter"
+        testFixturesApi "org.testcontainers:junit-jupiter"
     }
 
     test {
