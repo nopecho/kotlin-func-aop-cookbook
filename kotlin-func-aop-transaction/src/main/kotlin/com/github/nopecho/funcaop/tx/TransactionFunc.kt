@@ -28,5 +28,7 @@ class TransactionFunc(private val _advice: TransactionAdvice) {
 
         @Transactional(readOnly = true)
         fun <T> readOnly(block: () -> T): T = block()
+
+        // @Transactional(propagation = ..., isolation = ...)
     }
 }

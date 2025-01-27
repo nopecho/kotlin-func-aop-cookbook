@@ -24,30 +24,51 @@ import org.springframework.stereotype.Service
 class TransactionFuncTest : TestcontainersSupport(listOf(PostgresTestcontainers())) {
 
     @Autowired
-    private lateinit var sut: TransactionTestService
+    private lateinit var service: TransactionTestService
+
+    @Autowired
+    private lateinit var repository: UserJdbcRepository
 
     @Test
     fun `should execute read only transactional block`() {
-        val actual = sut.getUser(777)
+        val actual = service.getUser(777)
 
         actual.id shouldBe 777
     }
 
     @Test
     fun `should execute transactional block`() {
-        val actual = sut.updateEmail(777, "update@email.com")
+        val actual = service.updateEmail(777, "update@email.com")
 
         actual.email shouldBe "update@email.com"
     }
 
     @Test
     fun `should rollback transaction`() {
-        val before = sut.getUser(777)
-        shouldThrowAny { sut.updateThrowing(before.id!!, "throw-rollback@email.com") }
+        val before = service.getUser(777)
+        shouldThrowAny { service.updateThrowing(before.id!!, "throw-rollback@email.com") }
 
-        val actual = sut.getUser(before.id!!)
+        val actual = service.getUser(before.id!!)
 
         actual.email shouldBe before.email
+    }
+
+    @Test
+    fun `should execute multiple transaction`() {
+        TransactionFunc.execute {
+            val user = repository.findById(777).orElseThrow()
+            repository.save(user.copy(email = "update1@email.com"))
+        }
+
+        shouldThrowAny {
+            TransactionFunc.execute {
+                val user = repository.findById(777).orElseThrow()
+                repository.save(user.copy(email = "update2@email.com"))
+                throw IllegalStateException("Rollback Transaction!")
+            }
+        }
+
+        repository.findById(777).orElseThrow().email shouldBe "update1@email.com"
     }
 
 
