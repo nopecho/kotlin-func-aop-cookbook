@@ -1,0 +1,7 @@
+dependencies {
+    implementation "org.springframework:spring-tx"
+
+    testApi(testFixtures(project(':kotlin-func-aop-support')))
+    testImplementation "org.springframework.boot:spring-boot-starter-data-jdbc"
+    testRuntimeOnly "org.postgresql:postgresql:42.7.3"
+}
