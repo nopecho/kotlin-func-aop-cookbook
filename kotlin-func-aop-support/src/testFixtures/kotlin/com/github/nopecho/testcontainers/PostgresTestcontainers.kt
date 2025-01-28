@@ -22,7 +22,7 @@ import javax.sql.DataSource
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 @Import(PostgresTestcontainers.Companion.TestJdbcConfig::class)
-annotation class EnablePostgresTestcontainersConfig
+annotation class EnableJdbcTestConfig
 
 
 class PostgresTestcontainers : TestcontainersMark {

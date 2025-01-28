@@ -1,5 +1,8 @@
 package com.github.nopecho.testcontainers
 
+import org.redisson.Redisson
+import org.redisson.api.RedissonClient
+import org.redisson.config.Config
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
@@ -14,8 +17,13 @@ import org.testcontainers.utility.DockerImageName.parse
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-@Import(RedisTestcontainers.Companion.TestRedisConfig::class)
-annotation class EnableRedisTestcontainersConfig
+@Import(RedisTestcontainers.Companion.TestLettuceConfig::class)
+annotation class EnableLettuceTestConfig
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+@Import(RedisTestcontainers.Companion.TestRedissonConfig::class)
+annotation class EnableRedissonTestConfig
 
 
 class RedisTestcontainers : TestcontainersMark {
@@ -30,7 +38,7 @@ class RedisTestcontainers : TestcontainersMark {
         }
 
         @TestConfiguration
-        class TestRedisConfig {
+        class TestLettuceConfig {
             @Bean
             @Primary
             fun testConnectionFactory(): RedisConnectionFactory {
@@ -39,6 +47,19 @@ class RedisTestcontainers : TestcontainersMark {
                     port = redisContainer.firstMappedPort
                 }
                 return LettuceConnectionFactory(configuration)
+            }
+        }
+
+        @TestConfiguration
+        class TestRedissonConfig {
+            @Bean
+            @Primary
+            fun redissonClient(): RedissonClient {
+                val config = Config().apply {
+                    val address = "redis://${redisContainer.host}:${redisContainer.firstMappedPort}"
+                    useSingleServer().setAddress(address)
+                }
+                return Redisson.create(config)
             }
         }
     }

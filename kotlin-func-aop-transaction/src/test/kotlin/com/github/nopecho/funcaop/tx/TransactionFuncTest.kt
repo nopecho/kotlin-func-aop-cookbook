@@ -2,7 +2,7 @@ package com.github.nopecho.funcaop.tx
 
 import com.github.nopecho.funcaop.tx.support.User
 import com.github.nopecho.funcaop.tx.support.UserJdbcRepository
-import com.github.nopecho.testcontainers.EnablePostgresTestcontainersConfig
+import com.github.nopecho.testcontainers.EnableJdbcTestConfig
 import com.github.nopecho.testcontainers.PostgresTestcontainers
 import com.github.nopecho.testcontainers.TestcontainersSupport
 import io.kotest.assertions.throwables.shouldThrowAny
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service
         UserJdbcRepository::class
     ]
 )
-@EnablePostgresTestcontainersConfig
+@EnableJdbcTestConfig
 class TransactionFuncTest : TestcontainersSupport(listOf(PostgresTestcontainers())) {
 
     @Autowired
