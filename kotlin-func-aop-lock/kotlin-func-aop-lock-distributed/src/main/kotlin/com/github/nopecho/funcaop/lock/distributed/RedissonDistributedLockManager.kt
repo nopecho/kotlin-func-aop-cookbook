@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.locks.Lock
 
 @Component
-class RedisDistributedLockManager(private val client: RedissonClient) : LockManager {
+class RedissonDistributedLockManager(private val client: RedissonClient) : LockManager {
 
     override fun getLockLevel(): LockLevel = LockLevel.DISTRIBUTED
 
