@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':kotlin-func-aop-lock:kotlin-func-aop-lock-core')
     implementation "org.redisson:redisson-spring-boot-starter:3.38.1"
+    testRuntimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.104.Final:osx-aarch_64' // MacOS Silicon 라이브러리 누락 문제
 }

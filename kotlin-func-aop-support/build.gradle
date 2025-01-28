@@ -6,4 +6,5 @@ dependencies {
     testFixturesApi "org.springframework.boot:spring-boot-starter-test"
     testFixturesApi "org.jetbrains.kotlinx:kotlinx-coroutines-core"
     testFixturesApi "org.jetbrains.kotlinx:kotlinx-coroutines-test"
+    testFixturesApi "org.redisson:redisson:3.38.1"
 }
