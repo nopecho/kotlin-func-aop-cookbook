@@ -1,2 +1,12 @@
-dependencies {
+subprojects {
+    dependencies {
+        testApi(testFixtures(project(':kotlin-func-aop-support')))
+    }
+    bootJar {
+        enabled = false
+    }
+}
+
+bootJar {
+    enabled = false
 }

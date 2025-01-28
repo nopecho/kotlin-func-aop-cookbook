@@ -3,4 +3,8 @@ include 'kotlin-func-aop-transaction'
 include 'kotlin-func-aop-cache'
 include 'kotlin-func-aop-lock'
 include 'kotlin-func-aop-support'
+include 'kotlin-func-aop-lock:kotlin-func-aop-lock-core'
+findProject(':kotlin-func-aop-lock:kotlin-func-aop-core')?.name = 'kotlin-func-aop-core'
+include 'kotlin-func-aop-lock:kotlin-func-aop-lock-distributed'
+findProject(':kotlin-func-aop-lock:kotlin-func-aop-lock-distributed')?.name = 'kotlin-func-aop-lock-distributed'
 
