@@ -8,7 +8,7 @@ readability, reusability, and maintainability while separating business logic fr
 
 * `kotlin-func-aop-transaction`: Supports transaction-related features.
 * `kotlin-func-aop-cache`: Supports caching-related features.(TODO)
-* `kotlin-func-aop-lock`: Supports locking-related features.(TODO)
+* `kotlin-func-aop-lock`: Supports locking-related features.
 * `kotlin-func-aop-support`: (Future expansion).
 
 ### kotlin-func-aop-transaction
@@ -73,4 +73,45 @@ class AnyService(
 #### Example
 
 ```kotlin
+@Service
+class SimpleOrderService(
+    private val orderRepository: OrderRepository,
+    private val productRepository: ProductRepository,
+    private val eventPublisher: ApplicationEventPublisher
+) {
+
+    /**
+     * step1. acquire lock
+     * step2. decrease product quantity
+     * step3. create order
+     * step4. publish payment event
+     */
+    fun order(command: OrderCommand): Order {
+        val lockOption = LockOption(
+            // lock key
+            key = "lock:order:product:${command.productId}",
+            // waiting for 3 seconds when trying to acquire a lock from other threads
+            waitTime = 3,
+            // if a lock is acquired and cannot be processed within 5 seconds, the acquired lock will be returned.
+            leaseTime = 5,
+            timeUnit = TimeUnit.SECONDS
+        )
+
+        // acquired distributed lock to product
+        val order = LockFunc.execute(lockOption, isDistributed = true) {
+            // start transaction
+            TransactionFunc.execute {
+                val product = productRepository.findById(command.productId)
+                product.decrease(command.quantity)
+                productRepository.save(product)
+
+                val newOrder = Order(command, OrderStatus.PENDING_PAYMENT)
+                orderRepository.save(newOrder)
+            }
+        }
+
+        eventPublisher.publish(PaymentEvent(order))
+        return order
+    }
+}
 ```
