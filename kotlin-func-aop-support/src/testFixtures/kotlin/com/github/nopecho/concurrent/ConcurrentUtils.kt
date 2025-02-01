@@ -10,9 +10,9 @@ val Dispatchers.VIRTUAL: CoroutineDispatcher
 
 object ConcurrentUtils {
 
-    fun run(callCount: Int = 200, task: () -> Unit) {
+    fun run(callCount: Int = 200, dispatcher: CoroutineDispatcher = Dispatchers.Default, task: () -> Unit) {
         val startSignal = CompletableDeferred<Unit>()
-        runBlocking(Dispatchers.VIRTUAL) {
+        runBlocking(dispatcher) {
             val jobs = (1..callCount).map {
                 async {
                     try {
