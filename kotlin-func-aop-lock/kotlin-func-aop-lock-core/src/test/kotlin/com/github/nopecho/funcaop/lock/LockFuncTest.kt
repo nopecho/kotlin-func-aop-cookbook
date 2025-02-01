@@ -29,11 +29,11 @@ class LockFuncTest {
     fun `should not using lock problem 2`() {
         val account = Account(0)
 
-        ConcurrentUtils.runThread(threadCount = 200) {
+        ConcurrentUtils.runThread(threadCount = 1_000) {
             account.deposit(100)
         }
 
-        account.balance shouldNotBe 100 * 200
+        account.balance shouldNotBe 100 * 1_000
     }
 
     @Test
