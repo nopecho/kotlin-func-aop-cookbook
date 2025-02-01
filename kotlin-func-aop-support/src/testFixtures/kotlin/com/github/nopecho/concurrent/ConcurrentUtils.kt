@@ -5,11 +5,14 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+val Dispatchers.VIRTUAL: CoroutineDispatcher
+    get() = Executors.newVirtualThreadPerTaskExecutor().asCoroutineDispatcher()
+
 object ConcurrentUtils {
 
     fun run(callCount: Int = 200, task: () -> Unit) {
         val startSignal = CompletableDeferred<Unit>()
-        runBlocking(Dispatchers.Default) {
+        runBlocking(Dispatchers.VIRTUAL) {
             val jobs = (1..callCount).map {
                 async {
                     try {
@@ -53,7 +56,7 @@ object ConcurrentUtils {
     }
 
     private fun setup(threadCount: Int): Triple<ExecutorService, CountDownLatch, CountDownLatch> {
-        val executor = Executors.newFixedThreadPool(threadCount)
+        val executor = Executors.newVirtualThreadPerTaskExecutor()
         val startLatch = CountDownLatch(1)
         val doneLatch = CountDownLatch(threadCount)
         return Triple(executor, startLatch, doneLatch)
