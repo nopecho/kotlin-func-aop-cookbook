@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  redis-node-1:
+    image: redis:7-alpine
+    ports:
+      - "17001:17001"
+      - "17002:17002"
+      - "17003:17003"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    volumes:
+      - ./redis-1.conf:/usr/local/etc/redis/redis.conf
+      - ./users.acl:/usr/local/etc/redis/users.acl
+
+  redis-node-2:
+    image: redis:7-alpine
+    network_mode: "service:redis-node-1"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    volumes:
+      - ./redis-2.conf:/usr/local/etc/redis/redis.conf
+      - ./users.acl:/usr/local/etc/redis/users.acl
+
+  redis-node-3:
+    image: redis:7-alpine
+    network_mode: "service:redis-node-1"
+    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+    volumes:
+      - ./redis-3.conf:/usr/local/etc/redis/redis.conf
+      - ./users.acl:/usr/local/etc/redis/users.acl
+
+  redis-cluster-entrypoint:
+    image: redis:7-alpine
+    network_mode: "service:redis-node-1"
+    depends_on:
+      - redis-node-1
+      - redis-node-2
+      - redis-node-3
+    command: [ "sh", "-c",
+      "
+      redis-cli --cluster create \
+      -a test \
+      0.0.0.0:17001 \
+      0.0.0.0:17002 \
+      0.0.0.0:17003 \
+      --cluster-replicas 0 \
+      --cluster-yes
+      "
+    ]
