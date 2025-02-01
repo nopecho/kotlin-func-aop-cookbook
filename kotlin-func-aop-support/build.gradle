@@ -7,4 +7,5 @@ dependencies {
     testFixturesApi "org.jetbrains.kotlinx:kotlinx-coroutines-core"
     testFixturesApi "org.jetbrains.kotlinx:kotlinx-coroutines-test"
     testFixturesApi "org.redisson:redisson:3.38.1"
+    testRuntimeOnly "io.netty:netty-resolver-dns-native-macos:4.1.104.Final:osx-aarch_64"
 }
