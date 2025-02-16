@@ -14,15 +14,14 @@ interface LockManager {
 
     fun <T> lock(option: LockOption, block: () -> T): T {
         val lock = getLock(option)
-        val isLocked = tryLock(lock, option)
-        return if (isLocked) {
+        return if (tryLock(lock, option)) {
             try {
                 block()
             } finally {
                 unlock(lock)
             }
         } else {
-            throw IllegalStateException("Lock acquisition failure. key: ${option.key}, waitTime: ${option.waitTime}, leaseTime: ${option.leaseTime}, timeUnit: ${option.timeUnit}")
+            throw LockAcquisitionFailureException(option)
         }
     }
 }

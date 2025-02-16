@@ -56,6 +56,7 @@ object ConcurrentUtils {
     }
 
     private fun setup(threadCount: Int): Triple<ExecutorService, CountDownLatch, CountDownLatch> {
+        // 가상 스레드 풀
         val executor = Executors.newVirtualThreadPerTaskExecutor()
         val startLatch = CountDownLatch(1)
         val doneLatch = CountDownLatch(threadCount)
